@@ -1,0 +1,61 @@
+function onEdit(){
+
+var guiaativa = SpreadsheetApp.getActive().getSheetName();
+
+if(guiaativa == "Print_label_day"){
+
+var guiafiltro = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Print_label_day");
+
+var linha = guiafiltro.getActiveCell().getRow();
+var coluna = guiafiltro.getActiveCell().getColumn();
+
+if(linha == 5){
+  if(coluna == 9)
+
+    Filtro();
+
+}
+
+}
+
+}
+
+
+function Filtro() {
+
+var planilha = SpreadsheetApp.getActiveSpreadsheet();
+
+var guiadados = planilha.getSheetByName("Marco-21");
+var guiafiltro = planilha.getSheetByName("Print_label_day");
+
+guiafiltro.getRange("A9:E").activate();
+guiafiltro.getActiveRangeList().clear({contentsOnly: true, skipFilteredRows: false});
+
+var data = guiafiltro.getRange("I5").getValue();
+var data = data.toString();
+
+if(data == ""){
+Browser.msgBox("Escolha uma data válida!");
+return
+}
+
+var ultimalinha = guiadados.getLastRow();
+var ultimacoluna = guiadados.getLastColumn();
+
+var dados = guiadados.getRange(2,1, ultimalinha - 1, ultimacoluna).getValues();
+
+var filtro = dados.filter(function(item){
+
+if(data != ""){
+return item[3] == data;
+}
+
+});
+
+if(filtro == ""){
+return;
+}
+
+guiafiltro.getRange(9,1, filtro.length, filtro[0].length).setValues(filtro);
+
+}
